@@ -1,8 +1,8 @@
-const db = require('../db');
+const pool = require('../db');
 
 const addUser = (req, res) => {
   const { username, department } = req.body;
-  db.query('INSERT INTO users (username, department) VALUES (?, ?)', [username, department], (err, results) => {
+  pool.query('INSERT INTO users (username, department) VALUES ($1, $2)', [username, department], (err, results) => {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
@@ -12,11 +12,11 @@ const addUser = (req, res) => {
 };
 
 const getUsers = (req, res) => {
-  db.query('SELECT * FROM users', (err, results) => {
+  pool.query('SELECT * FROM users', (err, results) => {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
-      res.status(200).json(results);
+      res.status(200).json(results.rows);
     }
   });
 };
